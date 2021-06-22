@@ -1,3 +1,4 @@
+package type_checking;
 
 public class Type {
 
@@ -27,7 +28,7 @@ public class Type {
 
         private int dimension;
 
-        public ArrayType(Type baseType, int dimension){
+        public ArrayType(Type baseType, int dimension) {
             this.baseType = baseType;
             this.dimension = dimension;
         }

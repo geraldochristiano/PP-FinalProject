@@ -1,6 +1,10 @@
+package type_checking;
+
+import grammar.DBaseListener;
+import grammar.DParser;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
-public class TypeChecker extends DBaseListener{
+public class TypeChecker extends DBaseListener {
 
     public final static TypeChecker INSTANCE = new TypeChecker();
 
