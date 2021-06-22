@@ -1,4 +1,4 @@
-// Generated from C:/Users/Twam/Documents/PP-FinalProject/src\D.g4 by ANTLR 4.9.1
+// Generated from /Users/geraldochristiano/IdeaProjects/PP-FinalProject/src/D.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -113,17 +113,29 @@ public interface DListener extends ParseTreeListener {
 	 */
 	void exitBlockStat(DParser.BlockStatContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code prefixExpr}
-	 * labeled alternative in {@link DParser#expr}.
+	 * Enter a parse tree produced by the {@code parallelStat}
+	 * labeled alternative in {@link DParser#stat}.
 	 * @param ctx the parse tree
 	 */
-	void enterPrefixExpr(DParser.PrefixExprContext ctx);
+	void enterParallelStat(DParser.ParallelStatContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code prefixExpr}
-	 * labeled alternative in {@link DParser#expr}.
+	 * Exit a parse tree produced by the {@code parallelStat}
+	 * labeled alternative in {@link DParser#stat}.
 	 * @param ctx the parse tree
 	 */
-	void exitPrefixExpr(DParser.PrefixExprContext ctx);
+	void exitParallelStat(DParser.ParallelStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code doNothingStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoNothingStat(DParser.DoNothingStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code doNothingStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoNothingStat(DParser.DoNothingStatContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code charExpr}
 	 * labeled alternative in {@link DParser#expr}.
@@ -149,6 +161,18 @@ public interface DListener extends ParseTreeListener {
 	 */
 	void exitIntegerExpr(DParser.IntegerExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code arrayExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayExpr(DParser.ArrayExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code arrayExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayExpr(DParser.ArrayExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code addMinExpr}
 	 * labeled alternative in {@link DParser#expr}.
 	 * @param ctx the parse tree
@@ -173,6 +197,42 @@ public interface DListener extends ParseTreeListener {
 	 */
 	void exitBooleanExpr(DParser.BooleanExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code parensExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterParensExpr(DParser.ParensExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parensExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitParensExpr(DParser.ParensExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code stringExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringExpr(DParser.StringExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringExpr(DParser.StringExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code prefixExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrefixExpr(DParser.PrefixExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code prefixExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrefixExpr(DParser.PrefixExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code expoExpr}
 	 * labeled alternative in {@link DParser#expr}.
 	 * @param ctx the parse tree
@@ -196,18 +256,6 @@ public interface DListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultDivExpr(DParser.MultDivExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code parensExpr}
-	 * labeled alternative in {@link DParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterParensExpr(DParser.ParensExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code parensExpr}
-	 * labeled alternative in {@link DParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitParensExpr(DParser.ParensExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code andOrExpr}
 	 * labeled alternative in {@link DParser#expr}.
@@ -245,15 +293,245 @@ public interface DListener extends ParseTreeListener {
 	 */
 	void exitCompareExpr(DParser.CompareExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DParser#type}.
+	 * Enter a parse tree produced by the {@code negate}
+	 * labeled alternative in {@link DParser#prefixOp}.
 	 * @param ctx the parse tree
 	 */
-	void enterType(DParser.TypeContext ctx);
+	void enterNegate(DParser.NegateContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link DParser#type}.
+	 * Exit a parse tree produced by the {@code negate}
+	 * labeled alternative in {@link DParser#prefixOp}.
 	 * @param ctx the parse tree
 	 */
-	void exitType(DParser.TypeContext ctx);
+	void exitNegate(DParser.NegateContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code not}
+	 * labeled alternative in {@link DParser#prefixOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterNot(DParser.NotContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code not}
+	 * labeled alternative in {@link DParser#prefixOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitNot(DParser.NotContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code equal}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterEqual(DParser.EqualContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code equal}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitEqual(DParser.EqualContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code notEqual}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotEqual(DParser.NotEqualContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code notEqual}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotEqual(DParser.NotEqualContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lessThan}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterLessThan(DParser.LessThanContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lessThan}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitLessThan(DParser.LessThanContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code greaterThan}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterGreaterThan(DParser.GreaterThanContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code greaterThan}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitGreaterThan(DParser.GreaterThanContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lessEqual}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterLessEqual(DParser.LessEqualContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lessEqual}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitLessEqual(DParser.LessEqualContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code greaterEqual}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterGreaterEqual(DParser.GreaterEqualContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code greaterEqual}
+	 * labeled alternative in {@link DParser#compOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitGreaterEqual(DParser.GreaterEqualContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code multiply}
+	 * labeled alternative in {@link DParser#multOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiply(DParser.MultiplyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code multiply}
+	 * labeled alternative in {@link DParser#multOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiply(DParser.MultiplyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code divide}
+	 * labeled alternative in {@link DParser#multOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterDivide(DParser.DivideContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code divide}
+	 * labeled alternative in {@link DParser#multOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitDivide(DParser.DivideContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code plus}
+	 * labeled alternative in {@link DParser#addOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterPlus(DParser.PlusContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code plus}
+	 * labeled alternative in {@link DParser#addOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitPlus(DParser.PlusContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code minus}
+	 * labeled alternative in {@link DParser#addOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterMinus(DParser.MinusContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code minus}
+	 * labeled alternative in {@link DParser#addOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitMinus(DParser.MinusContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code and}
+	 * labeled alternative in {@link DParser#boolOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnd(DParser.AndContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code and}
+	 * labeled alternative in {@link DParser#boolOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnd(DParser.AndContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code or}
+	 * labeled alternative in {@link DParser#boolOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterOr(DParser.OrContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code or}
+	 * labeled alternative in {@link DParser#boolOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitOr(DParser.OrContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code arrayType}
+	 * labeled alternative in {@link DParser#dataType}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayType(DParser.ArrayTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code arrayType}
+	 * labeled alternative in {@link DParser#dataType}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayType(DParser.ArrayTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code primType}
+	 * labeled alternative in {@link DParser#dataType}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimType(DParser.PrimTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code primType}
+	 * labeled alternative in {@link DParser#dataType}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimType(DParser.PrimTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code intType}
+	 * labeled alternative in {@link DParser#primitive}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntType(DParser.IntTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code intType}
+	 * labeled alternative in {@link DParser#primitive}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntType(DParser.IntTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boolType}
+	 * labeled alternative in {@link DParser#primitive}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolType(DParser.BoolTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolType}
+	 * labeled alternative in {@link DParser#primitive}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolType(DParser.BoolTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code charType}
+	 * labeled alternative in {@link DParser#primitive}.
+	 * @param ctx the parse tree
+	 */
+	void enterCharType(DParser.CharTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code charType}
+	 * labeled alternative in {@link DParser#primitive}.
+	 * @param ctx the parse tree
+	 */
+	void exitCharType(DParser.CharTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code stringType}
+	 * labeled alternative in {@link DParser#primitive}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringType(DParser.StringTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringType}
+	 * labeled alternative in {@link DParser#primitive}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringType(DParser.StringTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DParser#array}.
 	 * @param ctx the parse tree
