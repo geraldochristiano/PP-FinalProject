@@ -1,0 +1,40 @@
+while -> whilst
+if -> whenever
+else -> elseways
+for -> loop
+
+Example:
+#### Allowed identifiers (start with a letter, then letter or underscore or digits):
+a__bcd123, ABcD94____
+
+#### Integer declaration:
+int c = 6;
+
+#### Boolean declaration:
+bool a = go;
+
+#### Array declaration:
+int [4] arr = [1,2,3,4];
+bool [3] bol = [go,no-go,no-go];
+
+#### If statement:
+whenever (x == 17) return go;
+whenever (x == 8) { return no-go };
+
+#### If-Else statement:
+whenever (x == 8) return go;
+elseways return no-go;
+
+whenever (x == 8) {
+    return go;
+} elseways {
+    return no-go;
+}
+
+#### While loop
+whilst (3 == 5 and x == 9) x++;
+whilst (10 == x or x == 10) {x = 10;}
+
+#### For loop
+loop (int x = 9; x < 5; x = x - 1) x = x;
+loop (int x = 9; x < 5; x = x - 1) {x = x;}

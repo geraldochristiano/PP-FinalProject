@@ -9,43 +9,32 @@ public class Type {
     public final static Type STRING = new Type("str");
     public final static Type ERROR = new Type(null);
 
+    /** Special data type, indicating that the expression can be of any type*/
+    public final static Type WILDCARD = new Type("(Any type)");
+
     /** Keyword of the data types as they exist in the grammar*/
     private String keyword;
 
-    /** Constructor is made private to prevent instantiation from outside this class*/
-    private Type(String keyword){
+    /** Constructor is made protected to prevent instantiation from outside classes that don't extend this class*/
+    protected Type(String keyword){
         this.keyword = keyword;
     }
 
-    /**
-     * Representing the array data type. An array have a dimension value representing its dimension and
-     * a primitive data type representing the base type, i.e. the data type of the last dimension of the array.
-     * The class OVERRIDES 'equals' method to be the comparison operator/method of this class.
-     * Two array data types are equal if they both have the same number of dimensions and base type.
+    public String getKeyword() {
+        return this.keyword;
+    }
+
+    @Override
+    public String toString(){
+        return this.keyword;
+    }
+
+    /** This method should be the preferred comparison method than <code>==</code>.
+     *  Allows equality when comparing wildcard type.
      */
-    static class ArrayType{
-        private Type baseType;
-
-        private int dimension;
-
-        public ArrayType(Type baseType, int dimension) {
-            this.baseType = baseType;
-            this.dimension = dimension;
-        }
-
-        public Type getBaseType(){
-            return this.baseType;
-        }
-
-        public int getDimension(){
-            return this.dimension;
-        }
-
-        @Override
-        public boolean equals(Object obj){
-            if (! (obj instanceof ArrayType compare)) return false;
-            return (compare.getBaseType() == this.getBaseType()) && (compare.getDimension() == this.getDimension());
-        }
-
+    public boolean equals(Object obj){
+        if (!(obj instanceof Type type)) return false;
+        if (this == Type.WILDCARD || type == Type.WILDCARD)return true;
+        else return this == type;
     }
 }

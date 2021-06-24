@@ -1,4 +1,4 @@
-// Generated from C:/Users/Twam/Documents/PP-FinalProject/src/Grammar\D.g4 by ANTLR 4.9.1
+// Generated from /Users/geraldochristiano/IdeaProjects/PP-FinalProject/src/grammar/D.g4 by ANTLR 4.9.1
 package grammar;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -125,6 +125,30 @@ public interface DListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParallelStat(DParser.ParallelStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code breakStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterBreakStat(DParser.BreakStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code breakStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitBreakStat(DParser.BreakStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code continueStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterContinueStat(DParser.ContinueStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code continueStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitContinueStat(DParser.ContinueStatContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code doNothingStat}
 	 * labeled alternative in {@link DParser#stat}.

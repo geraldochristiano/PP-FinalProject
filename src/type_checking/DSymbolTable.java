@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DSymbolTable implements SymbolTable {
     //Stores new variables declared in a scope, together with a boolean to store whether they have been initialized yet
-    public List<List<Tuple<String, Boolean>>> scopes;
+    private List<List<Tuple<String, Boolean, Type>>> scopes;
 
     public DSymbolTable() {
         this.scopes = new ArrayList<>();
@@ -42,7 +42,7 @@ public class DSymbolTable implements SymbolTable {
      * <code>false</code> if it was already declared in this scope.
      */
     @Override
-    public boolean add(Boolean decl, String id, Boolean init) {
+    public boolean add(Boolean decl, String id, Boolean init, Type type) {
         //If variable is not being declared here and it hasn't been declared before, return false
         if (!decl && !contains(id)) {
             return false;
@@ -53,7 +53,7 @@ public class DSymbolTable implements SymbolTable {
             return false;
         }
 
-        scopes.get(scopes.size() - 1).add(new Tuple<>(id, init));
+        scopes.get(scopes.size() - 1).add(new Tuple<>(id, init, type));
         return true;
     }
 
@@ -81,8 +81,8 @@ public class DSymbolTable implements SymbolTable {
      * @param id identifier to be checked
      * @return <code>true</code> if the identiefier is declared in the given scope; <code>false</code> otherwise.
      */
-    public boolean scope_contains(int scope, String id) {
-        for (Tuple<String, Boolean> var : scopes.get(scope)) {
+    private boolean scope_contains(int scope, String id) {
+        for (Tuple<String, Boolean, Type> var : scopes.get(scope)) {
             if (var.fst().equals(id)) {
                 return true;
             }
@@ -96,7 +96,60 @@ public class DSymbolTable implements SymbolTable {
      * @param id identifier to be checked
      * @return <code>true</code> if the identiefier is declared in the outer scope; <code>false</code> otherwise.
      */
-    public boolean outer_contains(String id) {
+    private boolean outer_contains(String id) {
         return scope_contains(scopes.size() - 1, id);
     }
+
+    /**
+     * Get a tuple containing identifier, init state, and type of a variable
+     *
+     * @param id identifier of the variable
+     * @return the tuple of the variable
+     */
+    private Tuple<String, Boolean, Type> getTuple(String id){
+        for (int i = scopes.size() - 1; i >= 0; i--){
+            if (scope_contains(i, id)){
+                for (Tuple<String, Boolean, Type> var : scopes.get(i)){
+                    if (var.fst().equals(id)){
+                        return var;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the type of the variable last declared/defined.
+     *
+     * @param id identifier of the variable
+     * @return the type of the variable from the latest declaration
+     */
+    public Type getType(String id){
+        Tuple<String,Boolean,Type> tuple = getTuple(id);
+        return tuple == null ? null : tuple.thrd();
+    }
+
+    /**
+     * Check if a variable has been initialized.
+     *
+     * @param id identifier of the variable
+     * @return <code>true</code> if the variable has been initialized, <code>false</code> otherwise
+     */
+    public boolean isInitialized(String id){
+        Tuple<String,Boolean,Type> tuple = getTuple(id);
+        return tuple != null && tuple.snd();
+    }
+
+    /**
+     * Change initialization state of a variable.
+     * This method does not care if the variable has been initialized or not.
+     *
+     * @param id identifier of the variable
+     */
+    public void initialize(String id) {
+        Tuple<String, Boolean, Type> tuple = getTuple(id);
+        if (tuple != null) tuple.snd(true);
+    }
+
 }

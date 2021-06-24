@@ -1,4 +1,4 @@
-// Generated from C:/Users/Twam/Documents/PP-FinalProject/src/Grammar\D.g4 by ANTLR 4.9.1
+// Generated from /Users/geraldochristiano/IdeaProjects/PP-FinalProject/src/grammar/D.g4 by ANTLR 4.9.1
 package grammar;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -131,6 +131,30 @@ public class DBaseListener implements DListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParallelStat(DParser.ParallelStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBreakStat(DParser.BreakStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBreakStat(DParser.BreakStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterContinueStat(DParser.ContinueStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitContinueStat(DParser.ContinueStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

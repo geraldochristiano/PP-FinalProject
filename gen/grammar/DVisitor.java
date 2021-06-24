@@ -1,4 +1,4 @@
-// Generated from C:/Users/Twam/Documents/PP-FinalProject/src/Grammar\D.g4 by ANTLR 4.9.1
+// Generated from /Users/geraldochristiano/IdeaProjects/PP-FinalProject/src/grammar/D.g4 by ANTLR 4.9.1
 package grammar;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -79,6 +79,20 @@ public interface DVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParallelStat(DParser.ParallelStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code breakStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBreakStat(DParser.BreakStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code continueStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitContinueStat(DParser.ContinueStatContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code doNothingStat}
 	 * labeled alternative in {@link DParser#stat}.

@@ -1,4 +1,4 @@
-// Generated from C:/Users/Twam/Documents/PP-FinalProject/src/Grammar\D.g4 by ANTLR 4.9.1
+// Generated from /Users/geraldochristiano/IdeaProjects/PP-FinalProject/src/grammar/D.g4 by ANTLR 4.9.1
 package grammar;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -81,6 +81,20 @@ public class DBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DVis
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitParallelStat(DParser.ParallelStatContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitBreakStat(DParser.BreakStatContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitContinueStat(DParser.ContinueStatContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
