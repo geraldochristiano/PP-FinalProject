@@ -1,5 +1,8 @@
 package type_checking;
 
+/** Representing the primitive data types of the D programming language.
+ *  Static instances represent the data types of this
+ */
 public class Type {
 
     /** The primitive data types represented as instances of this class. */
@@ -9,7 +12,9 @@ public class Type {
     public final static Type STRING = new Type("str");
     public final static Type ERROR = new Type(null);
 
-    /** Special data type, indicating that the expression can be of any type*/
+    /** Special data type, indicating that the expression can be of any type.
+     *  Used by empty arrays to use this as their base type.
+     */
     public final static Type WILDCARD = new Type("(Any type)");
 
     /** Keyword of the data types as they exist in the grammar*/
@@ -29,12 +34,4 @@ public class Type {
         return this.keyword;
     }
 
-    /** This method should be the preferred comparison method than <code>==</code>.
-     *  Allows equality when comparing wildcard type.
-     */
-    public boolean equals(Object obj){
-        if (!(obj instanceof Type type)) return false;
-        if (this == Type.WILDCARD || type == Type.WILDCARD)return true;
-        else return this == type;
-    }
 }

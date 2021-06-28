@@ -80,6 +80,13 @@ public interface DVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParallelStat(DParser.ParallelStatContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code critSectionStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCritSectionStat(DParser.CritSectionStatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code breakStat}
 	 * labeled alternative in {@link DParser#stat}.
 	 * @param ctx the parse tree
@@ -150,12 +157,26 @@ public interface DVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStringExpr(DParser.StringExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code shiftOpExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitShiftOpExpr(DParser.ShiftOpExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code prefixExpr}
 	 * labeled alternative in {@link DParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPrefixExpr(DParser.PrefixExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code bitwiseOpExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBitwiseOpExpr(DParser.BitwiseOpExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code expoExpr}
 	 * labeled alternative in {@link DParser#expr}.
@@ -170,13 +191,6 @@ public interface DVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMultDivExpr(DParser.MultDivExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code andOrExpr}
-	 * labeled alternative in {@link DParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAndOrExpr(DParser.AndOrExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code idExpr}
 	 * labeled alternative in {@link DParser#expr}.
@@ -277,18 +291,39 @@ public interface DVisitor<T> extends ParseTreeVisitor<T> {
 	T visitMinus(DParser.MinusContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code and}
-	 * labeled alternative in {@link DParser#boolOp}.
+	 * labeled alternative in {@link DParser#bitwiseOp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAnd(DParser.AndContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code or}
-	 * labeled alternative in {@link DParser#boolOp}.
+	 * labeled alternative in {@link DParser#bitwiseOp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitOr(DParser.OrContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code xor}
+	 * labeled alternative in {@link DParser#bitwiseOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitXor(DParser.XorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lshift}
+	 * labeled alternative in {@link DParser#shiftOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLshift(DParser.LshiftContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code rshift}
+	 * labeled alternative in {@link DParser#shiftOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRshift(DParser.RshiftContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code arrayType}
 	 * labeled alternative in {@link DParser#dataType}.

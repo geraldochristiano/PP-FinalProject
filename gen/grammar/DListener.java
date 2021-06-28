@@ -126,6 +126,18 @@ public interface DListener extends ParseTreeListener {
 	 */
 	void exitParallelStat(DParser.ParallelStatContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code critSectionStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterCritSectionStat(DParser.CritSectionStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code critSectionStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitCritSectionStat(DParser.CritSectionStatContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code breakStat}
 	 * labeled alternative in {@link DParser#stat}.
 	 * @param ctx the parse tree
@@ -246,6 +258,18 @@ public interface DListener extends ParseTreeListener {
 	 */
 	void exitStringExpr(DParser.StringExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code shiftOpExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterShiftOpExpr(DParser.ShiftOpExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code shiftOpExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitShiftOpExpr(DParser.ShiftOpExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code prefixExpr}
 	 * labeled alternative in {@link DParser#expr}.
 	 * @param ctx the parse tree
@@ -257,6 +281,18 @@ public interface DListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPrefixExpr(DParser.PrefixExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code bitwiseOpExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBitwiseOpExpr(DParser.BitwiseOpExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code bitwiseOpExpr}
+	 * labeled alternative in {@link DParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBitwiseOpExpr(DParser.BitwiseOpExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code expoExpr}
 	 * labeled alternative in {@link DParser#expr}.
@@ -281,18 +317,6 @@ public interface DListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultDivExpr(DParser.MultDivExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code andOrExpr}
-	 * labeled alternative in {@link DParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterAndOrExpr(DParser.AndOrExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code andOrExpr}
-	 * labeled alternative in {@link DParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitAndOrExpr(DParser.AndOrExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code idExpr}
 	 * labeled alternative in {@link DParser#expr}.
@@ -463,28 +487,64 @@ public interface DListener extends ParseTreeListener {
 	void exitMinus(DParser.MinusContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code and}
-	 * labeled alternative in {@link DParser#boolOp}.
+	 * labeled alternative in {@link DParser#bitwiseOp}.
 	 * @param ctx the parse tree
 	 */
 	void enterAnd(DParser.AndContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code and}
-	 * labeled alternative in {@link DParser#boolOp}.
+	 * labeled alternative in {@link DParser#bitwiseOp}.
 	 * @param ctx the parse tree
 	 */
 	void exitAnd(DParser.AndContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code or}
-	 * labeled alternative in {@link DParser#boolOp}.
+	 * labeled alternative in {@link DParser#bitwiseOp}.
 	 * @param ctx the parse tree
 	 */
 	void enterOr(DParser.OrContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code or}
-	 * labeled alternative in {@link DParser#boolOp}.
+	 * labeled alternative in {@link DParser#bitwiseOp}.
 	 * @param ctx the parse tree
 	 */
 	void exitOr(DParser.OrContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code xor}
+	 * labeled alternative in {@link DParser#bitwiseOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterXor(DParser.XorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code xor}
+	 * labeled alternative in {@link DParser#bitwiseOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitXor(DParser.XorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lshift}
+	 * labeled alternative in {@link DParser#shiftOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterLshift(DParser.LshiftContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lshift}
+	 * labeled alternative in {@link DParser#shiftOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitLshift(DParser.LshiftContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code rshift}
+	 * labeled alternative in {@link DParser#shiftOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterRshift(DParser.RshiftContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code rshift}
+	 * labeled alternative in {@link DParser#shiftOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitRshift(DParser.RshiftContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code arrayType}
 	 * labeled alternative in {@link DParser#dataType}.

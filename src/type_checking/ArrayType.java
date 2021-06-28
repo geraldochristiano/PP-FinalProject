@@ -10,8 +10,10 @@ import java.util.ArrayList;
  * Two array data types are equal if they both have the same number of dimensions and base type.
  */
 public class ArrayType extends Type{
+    /** Base type of the array*/
     private Type baseType;
 
+    /** Lengths of each dimension of the array*/
     private ArrayList<Integer> lengths;
 
     public ArrayType(Type baseType, ArrayList<Integer> lengths) {
@@ -33,10 +35,9 @@ public class ArrayType extends Type{
     @Override
     public boolean equals(Object obj){
         if (! (obj instanceof ArrayType compare)) return false;
-        if (this.baseType == Type.WILDCARD || compare.baseType == Type.WILDCARD)
+        if (compare.baseType == Type.WILDCARD || this.baseType == Type.WILDCARD)
             return compare.lengths.equals(this.lengths);
-        else
-            return (compare.baseType.equals(this.baseType) && compare.lengths.equals(this.lengths));
+        else return (compare.baseType.equals(this.baseType) && compare.lengths.equals(this.lengths));
     }
 
     @Override

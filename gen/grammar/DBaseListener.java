@@ -136,6 +136,18 @@ public class DBaseListener implements DListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCritSectionStat(DParser.CritSectionStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCritSectionStat(DParser.CritSectionStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBreakStat(DParser.BreakStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -256,6 +268,18 @@ public class DBaseListener implements DListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterShiftOpExpr(DParser.ShiftOpExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitShiftOpExpr(DParser.ShiftOpExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPrefixExpr(DParser.PrefixExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -263,6 +287,18 @@ public class DBaseListener implements DListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrefixExpr(DParser.PrefixExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBitwiseOpExpr(DParser.BitwiseOpExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBitwiseOpExpr(DParser.BitwiseOpExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -287,18 +323,6 @@ public class DBaseListener implements DListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMultDivExpr(DParser.MultDivExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAndOrExpr(DParser.AndOrExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAndOrExpr(DParser.AndOrExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -491,6 +515,42 @@ public class DBaseListener implements DListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitOr(DParser.OrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterXor(DParser.XorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitXor(DParser.XorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLshift(DParser.LshiftContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLshift(DParser.LshiftContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRshift(DParser.RshiftContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRshift(DParser.RshiftContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

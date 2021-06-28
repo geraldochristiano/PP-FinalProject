@@ -2,18 +2,19 @@ grammar D;
 
 program     : stat*;
 
-stat    : dataType ID (COMMA ID)* SEMI                              #declareStat
-        | dataType? ID (COMMA ID)* '=' expr (COMMA expr)* SEMI      #assignStat
-        | ID INCR SEMI                                              #incrStat
-        | ID DECR SEMI                                              #decrStat
-        | WHILST LPAR expr RPAR stat                                #whilstStat
-        | WHENEVER LPAR expr RPAR stat (ELSEWAYS stat)?             #wheneverStat
-        | LOOP LPAR stat SEMI expr SEMI stat RPAR stat              #loopStat
-        | LCURLY stat* RCURLY                                       #blockStat
-        | PARALLEL INTEGER WAIT? LCURLY stat* RCURLY                #parallelStat
-        | BREAK SEMI                                                #breakStat
-        | CONTINUE SEMI                                             #continueStat
-        | SEMI                                                      #doNothingStat
+stat    : SHARED? dataType ID (COMMA ID)* SEMI                              #declareStat
+        | (SHARED? dataType)? ID (COMMA ID)* '=' expr (COMMA expr)* SEMI    #assignStat
+        | ID INCR SEMI                                                      #incrStat
+        | ID DECR SEMI                                                      #decrStat
+        | WHILST LPAR expr RPAR stat                                        #whilstStat
+        | WHENEVER LPAR expr RPAR stat (ELSEWAYS stat)?                     #wheneverStat
+        | LOOP LPAR stat SEMI expr SEMI stat RPAR stat                      #loopStat
+        | LCURLY stat* RCURLY                                               #blockStat
+        | PARALLEL LCURLY stat* RCURLY                                      #parallelStat
+        | CRITICAL LCURLY stat* RCURLY                                      #critSectionStat
+        | BREAK SEMI                                                        #breakStat
+        | CONTINUE SEMI                                                     #continueStat
+        | SEMI                                                              #doNothingStat
         ;
 
 expr    : prefixOp expr                     #prefixExpr
@@ -21,7 +22,8 @@ expr    : prefixOp expr                     #prefixExpr
         | expr multOp expr                  #multDivExpr
         | expr addOp expr                   #addMinExpr
         | expr compOp expr                  #compareExpr
-        | expr boolOp expr                  #andOrExpr
+        | expr bitwiseOp expr               #bitwiseOpExpr
+        | expr shiftOp expr                 #shiftOpExpr
         | LPAR expr RPAR                    #parensExpr
         | ID                                #idExpr
         | INTEGER                           #integerExpr
@@ -31,7 +33,6 @@ expr    : prefixOp expr                     #prefixExpr
         | LBAR (expr (COMMA expr)*)? RBAR   #arrayExpr
         ;
 
-//function    : FUNCTION returnType ID  LCURLY stat* RCURLY; // FOR functions
 
 /** Operators */
 prefixOp    : MINUS #negate
@@ -54,8 +55,13 @@ addOp       : PLUS  #plus
             | MINUS #minus
             ;
 
-boolOp      : AND   #and
-            | OR    #or
+bitwiseOp   : AND       #and
+            | OR        #or
+            | XOR       #xor
+            ;
+
+shiftOp     : LSHIFT    #lshift
+            | RSHIFT    #rshift
             ;
 
 /** Data types definitions*/
@@ -63,10 +69,6 @@ dataType    : array         #arrayType
             | primitive     #primType
             ;
 
-/*returnType  : dataType      #functionReturn
-            | VOID          #procedureReturn
-            ;
-*/ // FOR functions
 primitive   : INT       #intType
             | BOOL      #boolType
             | CHAR      #charType
@@ -97,12 +99,16 @@ LBAR        : '[';
 RBAR        : ']';
 AND         : 'and';
 OR          : 'or';
+XOR         : 'xor';
+LSHIFT      : '<<';
+RSHIFT      : '>>';
 QUOTE       : '\'';
 DQUOTE      : '"';
 COMMA       : ',';
 
 SEMI        : ';';
-//VOID        : 'void';  // FOR functions
+SHARED      : 'shared';
+CRITICAL    : 'critical';
 WHILST      : 'whilst';  //while
 WHENEVER    : 'whenever';  //if
 ELSEWAYS    : 'elseways';  //else
@@ -113,7 +119,6 @@ CHAR        : 'char';
 STRING      : 'str';
 FUNCTION    : 'function';
 PARALLEL    : 'parallel';
-WAIT        : 'wait';
 BREAK       : 'break';
 CONTINUE    : 'continue';
 BOOLEAN     : ('go'|'no-go');  //true | false
