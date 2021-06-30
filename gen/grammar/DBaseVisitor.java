@@ -157,13 +157,6 @@ public class DBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DVis
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStringExpr(DParser.StringExprContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitShiftOpExpr(DParser.ShiftOpExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -361,13 +354,6 @@ public class DBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements DVis
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitCharType(DParser.CharTypeContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitStringType(DParser.StringTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

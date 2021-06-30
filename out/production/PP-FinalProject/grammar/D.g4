@@ -29,7 +29,6 @@ expr    : prefixOp expr                     #prefixExpr
         | INTEGER                           #integerExpr
         | BOOLEAN                           #booleanExpr
         | CHARLITERAL                       #charExpr
-        | STRLITERAL                        #stringExpr
         | LBAR (expr (COMMA expr)*)? RBAR   #arrayExpr
         ;
 
@@ -72,7 +71,6 @@ dataType    : array         #arrayType
 primitive   : INT       #intType
             | BOOL      #boolType
             | CHAR      #charType
-            | STRING    #stringType
             ;
 
 array       : primitive (LBAR INTEGER RBAR)+;
@@ -109,22 +107,19 @@ COMMA       : ',';
 SEMI        : ';';
 SHARED      : 'shared';
 CRITICAL    : 'critical';
-WHILST      : 'whilst';  //while
-WHENEVER    : 'whenever';  //if
-ELSEWAYS    : 'elseways';  //else
-LOOP        : 'loop';  //for
+WHILST      : 'whilst';     //while
+WHENEVER    : 'whenever';   //if
+ELSEWAYS    : 'elseways';   //else
+LOOP        : 'loop';       //for
 INT         : 'int';
 BOOL        : 'bool';
 CHAR        : 'char';
-STRING      : 'str';
-FUNCTION    : 'function';
 PARALLEL    : 'parallel';
 BREAK       : 'break';
 CONTINUE    : 'continue';
 BOOLEAN     : ('go'|'no-go');  //true | false
 
 CHARLITERAL : QUOTE CharLiteral QUOTE;
-STRLITERAL  : DQUOTE StringLiteral* DQUOTE;
 ID          : LETTER (LETTER | '_' | NUMBER)*;
 INTEGER     : ('0'|[1-9] NUMBER*);
 
@@ -133,5 +128,4 @@ WS : [ \t\n\r] -> skip; // whitespace
 fragment NUMBER         : [0-9];
 fragment LETTER         : [a-zA-Z];
 fragment CharLiteral    : ~['\\\t\n\r] | EscapeSequence;
-fragment StringLiteral  : ~["\\\t\n\r] | EscapeSequence;
 fragment EscapeSequence : '\\' [btnfr"'\\];

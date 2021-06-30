@@ -9,7 +9,6 @@ public class Type {
     public final static Type INTEGER = new Type("int");
     public final static Type BOOLEAN = new Type("bool");
     public final static Type CHARACTER = new Type("char");
-    public final static Type STRING = new Type("str");
     public final static Type ERROR = new Type(null);
 
     /** Special data type, indicating that the expression can be of any type.

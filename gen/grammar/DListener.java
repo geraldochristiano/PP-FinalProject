@@ -246,18 +246,6 @@ public interface DListener extends ParseTreeListener {
 	 */
 	void exitParensExpr(DParser.ParensExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code stringExpr}
-	 * labeled alternative in {@link DParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterStringExpr(DParser.StringExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code stringExpr}
-	 * labeled alternative in {@link DParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitStringExpr(DParser.StringExprContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code shiftOpExpr}
 	 * labeled alternative in {@link DParser#expr}.
 	 * @param ctx the parse tree
@@ -605,18 +593,6 @@ public interface DListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCharType(DParser.CharTypeContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code stringType}
-	 * labeled alternative in {@link DParser#primitive}.
-	 * @param ctx the parse tree
-	 */
-	void enterStringType(DParser.StringTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code stringType}
-	 * labeled alternative in {@link DParser#primitive}.
-	 * @param ctx the parse tree
-	 */
-	void exitStringType(DParser.StringTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DParser#array}.
 	 * @param ctx the parse tree

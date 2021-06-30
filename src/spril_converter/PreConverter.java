@@ -4,8 +4,11 @@ import grammar.DBaseListener;
 import grammar.DParser.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import type_checking.Type;
 
 public class PreConverter extends DBaseListener {
+
+    public static final PreConverter INSTANCE = new PreConverter();
 
     private Result result;
 
@@ -14,15 +17,36 @@ public class PreConverter extends DBaseListener {
     @Override
     public void enterDeclareStat(DeclareStatContext ctx){
         if (ctx.SHARED() != null){
+            Type type = null;
+            switch (ctx.dataType().getText()) {
+                case "int" -> type = Type.INTEGER;
+                case "bool" -> type = Type.BOOLEAN;
+                case "char" -> type = Type.CHARACTER;
+            }
             for (int i = 0; i < ctx.ID().size(); i++){
-                result.getSharedVariables().add(ctx.ID(i).getText());
+                result.getSharedVariables().add(new TwoTuple<>(ctx.ID(i).getText(), type));
+            }
+        }
+    }
+
+    @Override
+    public void enterAssignStat(AssignStatContext ctx){
+        if ((ctx.SHARED() != null) && (ctx.dataType() != null)){
+            Type type = null;
+            switch (ctx.dataType().getText()) {
+                case "int" -> type = Type.INTEGER;
+                case "bool" -> type = Type.BOOLEAN;
+                case "char" -> type = Type.CHARACTER;
+            }
+            for (int i = 0; i < ctx.ID().size(); i++){
+                result.getSharedVariables().add(new TwoTuple<>(ctx.ID(i).getText(), type));
             }
         }
     }
 
     @Override
     public void enterParallelStat(ParallelStatContext ctx){
-        currentThreads *= 2;
+        currentThreads++;
         if (result.getThreadsNeeded() < currentThreads){
             result.setThreadsNeeded(currentThreads);
         }
@@ -30,7 +54,7 @@ public class PreConverter extends DBaseListener {
 
     @Override
     public void exitParallelStat(ParallelStatContext ctx){
-        currentThreads /= 2;
+        currentThreads--;
     }
 
     @Override

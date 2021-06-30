@@ -46,9 +46,12 @@ public class TypeAndDeclarationChecker extends DBaseListener {
                 }
             }
         }
-        // Check if the current statement is the 'then statement' of a whenever statement
+        // Check if the current statement is the 'then statement' or 'else statement' of a whenever statement
         boolean isWheneverStatement = ctx.parent instanceof WheneverStatContext;
-        if (isWheneverStatement) symbolTable.openScope();
+        if (isWheneverStatement) {
+            addError("Invalid statement. Can not declare variable here.", ctx);
+            symbolTable.openScope();
+        }
 
         for (int i = 0; i < ctx.ID().size(); i ++){
             String id = ctx.ID(i).getText();
@@ -68,13 +71,14 @@ public class TypeAndDeclarationChecker extends DBaseListener {
 
     @Override
     public void exitAssignStat(AssignStatContext ctx){
-        // Check if the current statement is the 'then statement' of a whenever statement
+        // Check if the current statement is the 'then statement' or 'else statement' of a whenever statement
         boolean isWheneverStatement = ctx.parent instanceof WheneverStatContext;
         if (isWheneverStatement) symbolTable.openScope();
 
         if (ctx.ID().size() != ctx.expr().size()){
             addError("Number of variables and expressions do not match.", ctx);
         } else if (ctx.dataType() != null){ // Variable(s) are declared and assigned
+            if (isWheneverStatement) addError("Invalid statement. Can not declare variable here.", ctx);
             // Check redeclaration of shared variables
             // Redeclaration of a shared variable is not allowed
             for (int i = 0; i < ctx.ID().size(); i++){
@@ -193,8 +197,6 @@ public class TypeAndDeclarationChecker extends DBaseListener {
                     return symbolTable.add(true, id, init, Type.BOOLEAN);
                 case "char":
                     return symbolTable.add(true, id, init, Type.CHARACTER);
-                case "str":
-                    return symbolTable.add(true, id, init, Type.STRING);
             }
         } else if (ctx instanceof ArrayTypeContext arr){
             ArrayContext array = arr.array();
@@ -212,8 +214,6 @@ public class TypeAndDeclarationChecker extends DBaseListener {
                     return symbolTable.add(true, id, init, new ArrayType(Type.BOOLEAN, lengths));
                 case "char":
                     return symbolTable.add(true, id, init, new ArrayType(Type.CHARACTER, lengths));
-                case "str":
-                    return symbolTable.add(true, id, init, new ArrayType(Type.STRING, lengths));
             }
         }
         return false;
@@ -392,6 +392,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
         if ((nodeType.get(ctx.expr(0)).equals(Type.INTEGER)) && (nodeType.get(ctx.expr(1)).equals(Type.INTEGER))){
             nodeType.put(ctx, Type.INTEGER);
         } else {
+            addError("Exponentiation only works for integers.", ctx);
             nodeType.put(ctx, Type.ERROR);
         }
     }
@@ -401,6 +402,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
         if ((nodeType.get(ctx.expr(0)).equals(Type.INTEGER)) && (nodeType.get(ctx.expr(1)).equals(Type.INTEGER))){
             nodeType.put(ctx, Type.INTEGER);
         } else {
+            addError("Multiplication and division only work for integers.", ctx);
             nodeType.put(ctx, Type.ERROR);
         }
     }
@@ -410,6 +412,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
         if ((nodeType.get(ctx.expr(0)).equals(Type.INTEGER)) && (nodeType.get(ctx.expr(1)).equals(Type.INTEGER))){
             nodeType.put(ctx, Type.INTEGER);
         } else {
+            addError("Addition and subtraction only work for integers.", ctx);
             nodeType.put(ctx, Type.ERROR);
         }
     }
@@ -438,11 +441,11 @@ public class TypeAndDeclarationChecker extends DBaseListener {
             if ((expr0 == Type.INTEGER) || (expr0 == Type.BOOLEAN)){
                 nodeType.put(ctx, expr0);
             } else {
-                addError("Bitwise operation only works for integers and booleans", ctx);
+                addError("Bitwise/logical operation only works for integers and booleans", ctx);
                 nodeType.put(ctx, Type.ERROR);
             }
         } else {
-            addError("Both operands of a bitwise operation must be of equal type", ctx);
+            addError("Both operands of a bitwise/logical operation must be of equal type", ctx);
             nodeType.put(ctx, Type.ERROR);
         }
     }
@@ -456,10 +459,10 @@ public class TypeAndDeclarationChecker extends DBaseListener {
         } else if (!(expr1 == Type.INTEGER)) {
             addError("Left operand of a shift operation must be an integer",ctx);
             nodeType.put(ctx, Type.ERROR);
-        } else if (expr0 == Type.INTEGER || expr0 == Type.BOOLEAN){
+        } else if (expr0 == Type.INTEGER || expr0 == Type.CHARACTER){
             nodeType.put(ctx, expr0);
         } else {
-            addError("Shift operation only works for integers and booleans", ctx);
+            addError("Shift operation only works for integers and characters", ctx);
             nodeType.put(ctx, Type.ERROR);
         }
     }
@@ -474,7 +477,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
         if (symbolTable.isInitialized(ctx.getText())){
             nodeType.put(ctx, symbolTable.getType(ctx.getText()));
         } else {
-            addError("Can not use " + ctx.ID().getText() + " as it has not been initialized", ctx);
+            addError("Can not use '" + ctx.ID().getText() + "' as it has not been initialized", ctx);
             nodeType.put(ctx, Type.ERROR);
         }
     }
@@ -495,19 +498,14 @@ public class TypeAndDeclarationChecker extends DBaseListener {
     }
 
     @Override
-    public void exitStringExpr(StringExprContext ctx){
-        nodeType.put(ctx, Type.STRING);
-    }
-
-    @Override
     public void exitArrayExpr(ArrayExprContext ctx){
-        if (ctx.expr().size() == 0){
+        if (ctx.expr().size() == 0){ // Array is empty, can be of any type
             ArrayList<Integer> lst = new ArrayList<>();
             lst.add(0);
             nodeType.put(ctx, new ArrayType(Type.WILDCARD, lst));
             return;
         }
-
+        // Check if all elements of the array are of the same type
         Type curr = nodeType.get(ctx.expr(0));
         for (int i = 0; i < ctx.expr().size(); i++){
             Type next = nodeType.get(ctx.expr(i));
@@ -523,11 +521,11 @@ public class TypeAndDeclarationChecker extends DBaseListener {
             }
         }
 
-        if (curr instanceof ArrayType arrayType){
+        if (curr instanceof ArrayType arrayType){ // The elements of this array are also arrays
             ArrayList<Integer> lst = new ArrayList<>(arrayType.getLengths());
             lst.add(0,ctx.expr().size());
             nodeType.put(ctx, new ArrayType(arrayType.getBaseType(),lst));
-        } else {
+        } else { // The elements of this array are of primitive types
             ArrayList<Integer> lst = new ArrayList<>();
             lst.add(ctx.expr().size());
             nodeType.put(ctx, new ArrayType(curr, lst));
@@ -585,28 +583,14 @@ public class TypeAndDeclarationChecker extends DBaseListener {
     public static void main(String[] args) {
         String str =
                 """
-                shared int a = 3;
-                int dk;
-                dk = 3;
-                parallel{
-                    int b;
-                    b = a+3;
-                    parallel{
-                        int c = 3 - a;
-                        critical{
-                           c = 5;
-                           int d = 5;
-                           d = d + a;
-                        }
-                        
-                    }
-                }
-                whilst (dk == 3) {
-                    int a = 3;
-                }
+                shared int a;
+                char b;
+                a, b = 5, 'c';
+                
                 """;
         String str1 = "int a,a;"; // err
-        String str2 = "shared int a; shared int a;"; // err
-        System.out.println(TypeAndDeclarationChecker.INSTANCE.checkProgram(str));
+        String str2 = "shared int a,a;"; // err
+        String str3 = "int a,b = 5, a + 5;"; //err
+        System.out.println(TypeAndDeclarationChecker.INSTANCE.checkProgram(str3));
     }
 }

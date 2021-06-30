@@ -256,18 +256,6 @@ public class DBaseListener implements DListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStringExpr(DParser.StringExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStringExpr(DParser.StringExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterShiftOpExpr(DParser.ShiftOpExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -611,18 +599,6 @@ public class DBaseListener implements DListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCharType(DParser.CharTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStringType(DParser.StringTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStringType(DParser.StringTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

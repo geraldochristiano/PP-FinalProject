@@ -150,13 +150,6 @@ public interface DVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParensExpr(DParser.ParensExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code stringExpr}
-	 * labeled alternative in {@link DParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStringExpr(DParser.StringExprContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code shiftOpExpr}
 	 * labeled alternative in {@link DParser#expr}.
 	 * @param ctx the parse tree
@@ -359,13 +352,6 @@ public interface DVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCharType(DParser.CharTypeContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code stringType}
-	 * labeled alternative in {@link DParser#primitive}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStringType(DParser.StringTypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DParser#array}.
 	 * @param ctx the parse tree

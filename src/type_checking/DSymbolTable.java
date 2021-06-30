@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DSymbolTable implements SymbolTable {
     //Stores new variables declared in a scope, together with a boolean to store whether they have been initialized yet
-    private List<List<Tuple<String, Boolean, Type>>> scopes;
+    private List<List<ThreeTuple<String, Boolean, Type>>> scopes;
 
     public DSymbolTable() {
         this.scopes = new ArrayList<>();
@@ -53,7 +53,7 @@ public class DSymbolTable implements SymbolTable {
             return false;
         }
 
-        scopes.get(scopes.size() - 1).add(new Tuple<>(id, init, type));
+        scopes.get(scopes.size() - 1).add(new ThreeTuple<>(id, init, type));
         return true;
     }
 
@@ -82,7 +82,7 @@ public class DSymbolTable implements SymbolTable {
      * @return <code>true</code> if the identiefier is declared in the given scope; <code>false</code> otherwise.
      */
     private boolean scope_contains(int scope, String id) {
-        for (Tuple<String, Boolean, Type> var : scopes.get(scope)) {
+        for (ThreeTuple<String, Boolean, Type> var : scopes.get(scope)) {
             if (var.fst().equals(id)) {
                 return true;
             }
@@ -106,10 +106,10 @@ public class DSymbolTable implements SymbolTable {
      * @param id identifier of the variable
      * @return the tuple of the variable
      */
-    private Tuple<String, Boolean, Type> getTuple(String id){
+    private ThreeTuple<String, Boolean, Type> getTuple(String id){
         for (int i = scopes.size() - 1; i >= 0; i--){
             if (scope_contains(i, id)){
-                for (Tuple<String, Boolean, Type> var : scopes.get(i)){
+                for (ThreeTuple<String, Boolean, Type> var : scopes.get(i)){
                     if (var.fst().equals(id)){
                         return var;
                     }
@@ -126,7 +126,7 @@ public class DSymbolTable implements SymbolTable {
      * @return the type of the variable from the latest declaration
      */
     public Type getType(String id){
-        Tuple<String,Boolean,Type> tuple = getTuple(id);
+        ThreeTuple<String,Boolean,Type> tuple = getTuple(id);
         return tuple == null ? null : tuple.thrd();
     }
 
@@ -137,7 +137,7 @@ public class DSymbolTable implements SymbolTable {
      * @return <code>true</code> if the variable has been initialized, <code>false</code> otherwise
      */
     public boolean isInitialized(String id){
-        Tuple<String,Boolean,Type> tuple = getTuple(id);
+        ThreeTuple<String,Boolean,Type> tuple = getTuple(id);
         return tuple != null && tuple.snd();
     }
 
@@ -148,7 +148,7 @@ public class DSymbolTable implements SymbolTable {
      * @param id identifier of the variable
      */
     public void initialize(String id) {
-        Tuple<String, Boolean, Type> tuple = getTuple(id);
+        ThreeTuple<String, Boolean, Type> tuple = getTuple(id);
         if (tuple != null) tuple.snd(true);
     }
 

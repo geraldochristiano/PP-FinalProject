@@ -1,6 +1,7 @@
 package spril_converter;
 
 import org.antlr.v4.runtime.RuleContext;
+import type_checking.Type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,9 +13,7 @@ public class Result {
     /** Critical section existence in the program*/
     private boolean criticalSectionExist;
     /** List of shared variables*/
-    private List<String> sharedVariables = new ArrayList<>();
-
-    private HashMap<RuleContext, Integer> startAddresses = new HashMap<>();
+    private List<TwoTuple<String, Type>> sharedVariables;
 
     public int getThreadsNeeded() {
         return threadsNeeded;
@@ -28,12 +27,9 @@ public class Result {
 
     public void criticalSectionExist(){criticalSectionExist = true;}
 
-    public List<String> getSharedVariables(){
+    public List<TwoTuple<String,Type>> getSharedVariables(){
         return sharedVariables;
     }
 
-    public HashMap<RuleContext, Integer> getStartAddresses() {
-        return startAddresses;
-    }
 
 }
