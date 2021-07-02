@@ -386,7 +386,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
     public void enterPrintStat(PrintStatContext ctx){
         String id = ctx.ID().getText();
         if (currentParallelLocalVar.size() > 0){ // in parallel block
-            if (!symbolTable.contains(id) &&
+            if (!sharedVariables.contains(id) &&
                     !currentParallelLocalVar.get(currentParallelLocalVar.size() - 1).contains(id))
                 addError("Can not print. Variable has not been declared.", ctx);
         } else { // not in parallel block

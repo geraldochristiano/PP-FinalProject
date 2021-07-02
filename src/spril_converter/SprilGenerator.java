@@ -433,7 +433,7 @@ public class SprilGenerator extends DBaseVisitor<String> {
         } else if (type.equals(Type.CHARACTER)){
             stat.append("\tWriteInstr regA charIO,\n");
         } else if (type.equals(Type.BOOLEAN)){
-            stat.append("\tBranch regA (Rel (7))")
+            stat.append("\tBranch regA (Rel (7)),\n")
                     .append("\tLoad (ImmValue (ord 'n')) regA,\n")
                     .append("\tWriteInstr regA charIO,\n")
                     .append("\tLoad (ImmValue (ord 'o')) regA,\n")
@@ -713,7 +713,7 @@ public class SprilGenerator extends DBaseVisitor<String> {
                 if ((sharedMemory.get(i) instanceof SharedVariable sharedVar) && sharedVar.getName().equals(id))
                     return sharedVar;
         } else { // local variable
-            for (int i = variablesOffsets.size() - 1; i > 0; i--)
+            for (int i = variablesOffsets.size() - 1; i >= 0; i--)
                 for (Variable var : variablesOffsets.get(i))
                     if (var.getName().equals(id)) return var;
         }
