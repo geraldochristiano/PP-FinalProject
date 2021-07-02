@@ -17,11 +17,12 @@ public class Main {
 
     static String ARGUMENT = """
             int a = 5;
-            shared bool b = go;
-            parallel {
-                char a = ',';
-                print(a);
+            {
+                a = 7 + a;
+                int a = 0;
+                
             }
+            print(a);
             """;
 
     public static void main(String[] args) {

@@ -185,7 +185,6 @@ public class SprilGenerator extends DBaseVisitor<String> {
     @Override
     public String visitWhilstStat(WhilstStatContext ctx){
         StringBuilder stat = new StringBuilder();
-        stat.append("\t--whilst ").append(ctx.expr().getText()).append("\n");     // HASKELL COMMENT
         stat.append(openScope());
 
         addVariable("__continue", Type.WILDCARD);
@@ -199,19 +198,16 @@ public class SprilGenerator extends DBaseVisitor<String> {
 
         // insert the address of where the program counter will go when executing 'continue' or finishing
         // body to memory in variable '__continue'
-        stat.append("\t -- inserting continue\n");              // HASKELL COMMENT
         stat.append("\tLoad (ImmValue (").append(6).append(")) regC,\n")
                 .append("\tCompute Add regPC regC regC,\n")
                 .append("\tStore regC (IndAddr regF),\n");
         // insert the address of where the program counter will go when executing 'break' to memory in variable
         // '__break'
-        stat.append("\t -- inserting break\n");                 // HASKELL COMMENT
         stat.append("\tLoad (ImmValue (").append(2 + conditionLength + 3).append(")) regC,\n")
                 .append("\tCompute Add regPC regC regC,\n")
                 .append("\tCompute Incr regF regF regE,\n")
                 .append("\tStore regC (IndAddr regE),\n");
         // insert the condition and program jump
-        stat.append("\t-- whilst condition\n");                 // HASKELL COMMENT
         stat.append(conditionExpr)
                 .append("\tPop regA,\n")
                 .append("\tBranch regA (Rel 2),\n")
@@ -222,14 +218,12 @@ public class SprilGenerator extends DBaseVisitor<String> {
         stat.append("\t-- body end\n");
 
         stat.append(closeScope());
-        stat.append("\t --whilst end\n");                       // HASKELL COMMENT
         return stat.toString();
     }
 
     @Override
     public String visitWheneverStat(WheneverStatContext ctx){
         StringBuilder stat = new StringBuilder();
-        stat.append("\t--whenever ").append(ctx.expr().getText()).append("\n"); // HASKELL COMMENT
         stat.append(visit(ctx.expr()));
         stat.append("\tPop regA,\n")
                 .append("\tBranch regA (Rel 2),\n");
@@ -238,9 +232,7 @@ public class SprilGenerator extends DBaseVisitor<String> {
         if (ctx.stat(1) == null){ // no 'elseways' statement
             int thenStatLength = countProgramLength(thenStatement);
             stat.append("\tJump (Rel (").append(thenStatLength + 1).append(")),\n")
-                .append("\t--then\n")                           // HASKELL COMMENT
-                .append(thenStatement)
-                .append("\t--then end\n");                      // HASKELL COMMENT
+                .append(thenStatement);
 
         } else {
             String elseStatement = visit(ctx.stat(1));
@@ -248,12 +240,9 @@ public class SprilGenerator extends DBaseVisitor<String> {
             thenStatement += "\tJump (Rel (" + (elseStatLength + 1) + ")),\n";
             int thenStatLength = countProgramLength(thenStatement);
             stat.append("\tJump (Rel (").append(thenStatLength+1).append(")),\n")
-                    .append("\t--then\n")                       // HASKELL COMMENT
                     .append(thenStatement)
                     .append("\t--then end\n")
-                    .append("\t--else\n")                       // HASKELL COMMENT
-                    .append(elseStatement)
-                    .append("\t--else end\n");                  // HASKELL COMMENT
+                    .append(elseStatement);
         }
         return stat.toString();
     }
@@ -305,14 +294,12 @@ public class SprilGenerator extends DBaseVisitor<String> {
     @Override
     public String visitBlockStat(BlockStatContext ctx){
         StringBuilder stat = new StringBuilder();
-        stat.append("\t--block start\n");       // HASKELL COMMENT
         stat.append(openScope());
 
         for (int i = 0, k = ctx.stat().size();i < k;i++)
             stat.append(visit(ctx.stat(i)));
 
         stat.append(closeScope());
-        stat.append("\t--block end\n");         // HASKELL COMMENT
         return stat.toString();
     }
 
@@ -383,7 +370,6 @@ public class SprilGenerator extends DBaseVisitor<String> {
     public String visitBreakStat(BreakStatContext ctx){
         StringBuilder stat = new StringBuilder();
         int relMemoryOffset = getLastDeclaredVariableOffset("__break");
-        stat.append("\t --break\n");                    // HASKELL COMMENT
         stat.append("\tLoad (ImmValue (").append(relMemoryOffset - 1).append(")) regE,\n")
                 .append("\tCompute Add regE regF regF,\n")
                 .append("\tCompute Incr regF regF regE,\n")
@@ -396,7 +382,6 @@ public class SprilGenerator extends DBaseVisitor<String> {
     public String visitContinueStat(ContinueStatContext ctx){
         StringBuilder stat = new StringBuilder();
         int relMemoryOffset = getLastDeclaredVariableOffset("__continue");
-        stat.append("\t --continue\n");                 // HASKELL COMMENT
         stat.append("\tLoad (ImmValue (").append(relMemoryOffset).append(")) regE,\n")
                 .append("\tCompute Add regE regF regF,\n")
                 .append("\tLoad (IndAddr regF) regE,\n")
