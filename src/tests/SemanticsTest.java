@@ -29,7 +29,7 @@ public class SemanticsTest {
 //        testTrue("int a = 6 + 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 8")));
 //        testTrue("int a = 6 - 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 4")));
 //        testTrue("int a = 6 * 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 12")));
-            testTrue("int a = 6 / 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 3")));
+        testTrue("int a = 6 / 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 3")));
 //        testTrue("int a = 6 ^ 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 36")));
 //        testTrue("int a = 6; a++; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 7")));
 //        testTrue("int a = 6; a--; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 5")));
@@ -147,7 +147,7 @@ public class SemanticsTest {
 
     @Test
     public void zeroDivision() throws IOException {
-        testFalse("int a = 1 / 0; print(a);");
+        testTrue("int a = 1 / 0; print(a);", new ArrayList<>());
     }
 
     public void testTrue(String expr, ArrayList<String> expected) throws IOException {
@@ -183,8 +183,8 @@ public class SemanticsTest {
         String line;
         ArrayList<String> result = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
-            System.out.println(r.readLine());
+        for (int i = 0; i < 4; i++) {
+            r.readLine();
         }
 
         while (true) {
