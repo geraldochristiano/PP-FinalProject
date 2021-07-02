@@ -108,6 +108,13 @@ public interface DVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDoNothingStat(DParser.DoNothingStatContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code printStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrintStat(DParser.PrintStatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code charExpr}
 	 * labeled alternative in {@link DParser#expr}.
 	 * @param ctx the parse tree

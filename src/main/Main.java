@@ -8,22 +8,23 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import spril_converter.PreConverter;
+import spril_converter.PreGenerator;
 import spril_converter.Result;
-import spril_converter.SprilConverter;
+import spril_converter.SprilGenerator;
 import type_checking.TypeAndDeclarationChecker;
 
 public class Main {
 
     static String ARGUMENT = """
-            int a = 3;
-            parallel{}
+            
             """;
+
     public static void main(String[] args) {
-        if (args.length == 0){
+        /*if (args.length == 0){
             System.out.println("No arguments!");
-            //return;
-        }
+            return;
+        }*/
+
         // Lexical analysis and parsing
         CharStream stream = CharStreams.fromString(ARGUMENT);
         ParsingErrorListener errorListener = new ParsingErrorListener();
@@ -42,10 +43,9 @@ public class Main {
         }
 
         // Type and declaration checking
-        TypeAndDeclarationChecker typeDeclarationChecker = TypeAndDeclarationChecker.INSTANCE;
-        if (!typeDeclarationChecker.checkProgram(tree)) return;
+        if (!TypeAndDeclarationChecker.INSTANCE.checkProgram(tree)) return;
 
-        Result result = PreConverter.INSTANCE.preConvert(tree);
-        System.out.println(SprilConverter.INSTANCE.convertToSpril(tree, result));
+        Result result = PreGenerator.INSTANCE.preConvert(tree);
+        System.out.println(SprilGenerator.INSTANCE.convertToSpril(tree, result));
     }
 }

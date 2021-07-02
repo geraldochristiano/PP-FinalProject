@@ -6,9 +6,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import type_checking.Type;
 
-public class PreConverter extends DBaseListener {
+/**
+ *
+ */
+public class PreGenerator extends DBaseListener {
 
-    public static final PreConverter INSTANCE = new PreConverter();
+    public static final PreGenerator INSTANCE = new PreGenerator();
 
     private Result result;
 
@@ -23,9 +26,7 @@ public class PreConverter extends DBaseListener {
                 case "bool" -> type = Type.BOOLEAN;
                 case "char" -> type = Type.CHARACTER;
             }
-            for (int i = 0; i < ctx.ID().size(); i++){
-                result.getSharedVariables().add(new TwoTuple<>(ctx.ID(i).getText(), type));
-            }
+            result.getSharedVariables().add(new TwoTuple<>(ctx.ID().getText(), type));
         }
     }
 
@@ -38,9 +39,8 @@ public class PreConverter extends DBaseListener {
                 case "bool" -> type = Type.BOOLEAN;
                 case "char" -> type = Type.CHARACTER;
             }
-            for (int i = 0; i < ctx.ID().size(); i++){
-                result.getSharedVariables().add(new TwoTuple<>(ctx.ID(i).getText(), type));
-            }
+            result.getSharedVariables().add(new TwoTuple<>(ctx.ID().getText(), type));
+
         }
     }
 
@@ -59,7 +59,7 @@ public class PreConverter extends DBaseListener {
 
     @Override
     public void enterCritSectionStat(CritSectionStatContext ctx){
-        result.criticalSectionExist();
+        result.incrementCritSectionCount();
     }
 
     public Result preConvert(ParseTree tree){

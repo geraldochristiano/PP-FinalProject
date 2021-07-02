@@ -17,10 +17,6 @@ public class SharedVariable extends MemoryContent{
         this.lengthInMemory = lengthInMemory;
     }
 
-    public Type getSharedVarType() {
-        return sharedVarType;
-    }
-
     public int getLengthInMemory() {
         return lengthInMemory;
     }

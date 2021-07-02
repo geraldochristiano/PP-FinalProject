@@ -174,6 +174,18 @@ public interface DListener extends ParseTreeListener {
 	 */
 	void exitDoNothingStat(DParser.DoNothingStatContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code printStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintStat(DParser.PrintStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code printStat}
+	 * labeled alternative in {@link DParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintStat(DParser.PrintStatContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code charExpr}
 	 * labeled alternative in {@link DParser#expr}.
 	 * @param ctx the parse tree

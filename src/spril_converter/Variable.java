@@ -26,5 +26,5 @@ public class Variable extends MemoryContent{
         return endOffset;
     }
 
-
+    public Type getType(){return varType;}
 }

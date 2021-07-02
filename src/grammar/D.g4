@@ -2,23 +2,24 @@ grammar D;
 
 program     : stat*;
 
-stat    : SHARED? dataType ID (COMMA ID)* SEMI                              #declareStat
-        | (SHARED? dataType)? ID (COMMA ID)* '=' expr (COMMA expr)* SEMI    #assignStat
+stat    : SHARED? dataType ID SEMI                                          #declareStat
+        | (SHARED? dataType)? ID '=' expr SEMI                              #assignStat
         | ID INCR SEMI                                                      #incrStat
         | ID DECR SEMI                                                      #decrStat
         | WHILST LPAR expr RPAR stat                                        #whilstStat
         | WHENEVER LPAR expr RPAR stat (ELSEWAYS stat)?                     #wheneverStat
-        | LOOP LPAR stat SEMI expr SEMI stat RPAR stat                      #loopStat
+        | LOOP LPAR stat VERTSLASH expr VERTSLASH stat RPAR stat            #loopStat
         | LCURLY stat* RCURLY                                               #blockStat
         | PARALLEL LCURLY stat* RCURLY                                      #parallelStat
         | CRITICAL LCURLY stat* RCURLY                                      #critSectionStat
         | BREAK SEMI                                                        #breakStat
         | CONTINUE SEMI                                                     #continueStat
         | SEMI                                                              #doNothingStat
+        | PRINT LPAR ID RPAR SEMI                                           #printStat
         ;
 
 expr    : prefixOp expr                     #prefixExpr
-        | expr POW expr                     #expoExpr
+        | <assoc=right> expr POW expr       #expoExpr
         | expr multOp expr                  #multDivExpr
         | expr addOp expr                   #addMinExpr
         | expr compOp expr                  #compareExpr
@@ -104,7 +105,9 @@ QUOTE       : '\'';
 DQUOTE      : '"';
 COMMA       : ',';
 
+VERTSLASH   : '|';
 SEMI        : ';';
+PRINT       : 'print';
 SHARED      : 'shared';
 CRITICAL    : 'critical';
 WHILST      : 'whilst';     //while

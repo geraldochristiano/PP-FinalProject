@@ -12,7 +12,6 @@ public class Type {
     public final static Type ERROR = new Type(null);
 
     /** Special data type, indicating that the expression can be of any type.
-     *  Used by empty arrays to use this as their base type.
      */
     public final static Type WILDCARD = new Type("(Any type)");
 

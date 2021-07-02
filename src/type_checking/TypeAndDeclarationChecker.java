@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Class for checking the correctness of type of expressions, declaration of variables and their assignment, and
+ * correct usage and placing of statements.
+ */
 public class TypeAndDeclarationChecker extends DBaseListener {
 
     public final static TypeAndDeclarationChecker INSTANCE = new TypeAndDeclarationChecker();
@@ -26,42 +30,34 @@ public class TypeAndDeclarationChecker extends DBaseListener {
 
     @Override
     public void enterDeclareStat(DeclareStatContext ctx){
-        // Check redeclaration of shared variables
+        // Check redeclaration of shared variable
         // Redeclaration of a shared variable is not allowed
-        for (int i = 0; i < ctx.ID().size(); i++){
-            String id = ctx.ID(i).getText();
-            if (sharedVariables.contains(id)){
-                addError("Shared variables can not be redeclared anywhere with the same or different type." +
-                        " Only assignment is allowed.", ctx);
-            }
+        String id = ctx.ID().getText();
+        if (sharedVariables.contains(id)){
+            addError("Shared variables can not be redeclared anywhere with the same or different type." +
+                    " Only assignment is allowed.", ctx);
         }
-        // Check scope of declaration of shared variables
+
+        // Check scope of declaration of shared variable
         // Only global level declaration is allowed
         if (ctx.SHARED() != null) {
             if (!(ctx.parent instanceof ProgramContext)) {
                 addError("Shared variables can only be declared at global level.", ctx);
             } else {
-                for (int i = 0; i < ctx.ID().size(); i++){
-                    sharedVariables.add(ctx.ID(i).getText());
-                }
+                sharedVariables.add(id);
             }
         }
         // Check if the current statement is the 'then statement' or 'else statement' of a whenever statement
         boolean isWheneverStatement = ctx.parent instanceof WheneverStatContext;
-        if (isWheneverStatement) {
-            addError("Invalid statement. Can not declare variable here.", ctx);
-            symbolTable.openScope();
-        }
+        if (isWheneverStatement) symbolTable.openScope();
 
-        for (int i = 0; i < ctx.ID().size(); i ++){
-            String id = ctx.ID(i).getText();
-            if (!declareInSymbolTable(ctx.dataType(), id,false))
-                addError("Can not redeclare '" + id + "' in the same scope.", ctx);
-            else {
-                if (currentParallelLocalVar.size() != 0 && !sharedVariables.contains(id)){
-                    // Declaration in parallel block
-                    currentParallelLocalVar.get(currentParallelLocalVar.size() - 1).add(id);
-                }
+
+        if (!declareInSymbolTable(ctx.dataType(), id,false))
+            addError("Can not redeclare '" + id + "' in the same scope.", ctx);
+        else {
+            if (currentParallelLocalVar.size() != 0 && !sharedVariables.contains(id)){
+                // Declaration in parallel block
+                currentParallelLocalVar.get(currentParallelLocalVar.size() - 1).add(id);
             }
         }
 
@@ -75,65 +71,55 @@ public class TypeAndDeclarationChecker extends DBaseListener {
         boolean isWheneverStatement = ctx.parent instanceof WheneverStatContext;
         if (isWheneverStatement) symbolTable.openScope();
 
-        if (ctx.ID().size() != ctx.expr().size()){
-            addError("Number of variables and expressions do not match.", ctx);
-        } else if (ctx.dataType() != null){ // Variable(s) are declared and assigned
-            if (isWheneverStatement) addError("Invalid statement. Can not declare variable here.", ctx);
-            // Check redeclaration of shared variables
+        if (ctx.dataType() != null){ // Variable is declared and assigned
+            // Check redeclaration of shared variable
             // Redeclaration of a shared variable is not allowed
-            for (int i = 0; i < ctx.ID().size(); i++){
-                String id = ctx.ID(i).getText();
-                if (sharedVariables.contains(id)){
-                    addError("Shared variables can not be redeclared with the same or different type." +
-                            " Only assignment is permitted.", ctx);
-                }
+            String id = ctx.ID().getText();
+            if (sharedVariables.contains(id)){
+                addError("Shared variables can not be redeclared with the same or different type." +
+                        " Only assignment is permitted.", ctx);
             }
-            // Check scope of declaration of shared variables
+
+            // Check scope of declaration of shared variable
             // Only global level declaration is allowed
             if (ctx.SHARED() != null) {
                 if (!(ctx.parent instanceof ProgramContext)) {
                     addError("Shared variables can only be declared at global level.", ctx);
                 } else {
-                    for (int i = 0; i < ctx.ID().size(); i++){
-                        sharedVariables.add(ctx.ID(i).getText());
-                    }
+                    sharedVariables.add(id);
                 }
             }
 
-            for (int i = 0; i < ctx.ID().size(); i++){
-                String id = ctx.ID(i).getText();
-                if (!declareInSymbolTable(ctx.dataType(), id, true))
-                    addError("Can not redeclare '" + id + "' in the same scope.", ctx);
-                else if (!nodeType.get(ctx.expr(i)).equals(symbolTable.getType(id)))
-                    addError("Can not assign to '" + id + "' because expected and actual type is different.", ctx);
-                else if (currentParallelLocalVar.size() != 0 && !sharedVariables.contains(id)){
-                    // Declaration and assignment in parallel block
-                    if (!onlyLocalAndSharedVariablesUsed(ctx.expr(i)))
-                        addError("Can not declare and assign to '" + id + "' because it uses local variable(s)" +
-                                " outside the current parallel block", ctx);
-                    else currentParallelLocalVar.get(currentParallelLocalVar.size() - 1).add(id);
-                }
+            if (!declareInSymbolTable(ctx.dataType(), id, true))
+                addError("Can not redeclare '" + id + "' in the same scope.", ctx);
+            else if (!nodeType.get(ctx.expr()).equals(symbolTable.getType(id)))
+                addError("Can not assign to '" + id + "' because expected and actual type is different.", ctx);
+            else if (currentParallelLocalVar.size() != 0 && !sharedVariables.contains(id)){
+                // Declaration and assignment in parallel block
+                if (!onlyLocalAndSharedVariablesUsed(ctx.expr()))
+                    addError("Can not declare and assign to '" + id + "' because it uses local variable(s)" +
+                            " outside the current parallel block", ctx);
+                else currentParallelLocalVar.get(currentParallelLocalVar.size() - 1).add(id);
             }
-        } else { // Variable(s) are only assigned
-            for (int i = 0; i < ctx.ID().size(); i++){
-                String id = ctx.ID(i).getText();
-                if (!symbolTable.contains(id)){
-                    addError("Can not assign to '" + id + "' as it has not been declared before.", ctx);
-                } else if (!nodeType.get(ctx.expr(i)).equals(symbolTable.getType(id))){
-                    addError("Can not assign to '" + id + "' because expected and actual type is different.",ctx);
-                } else if (currentParallelLocalVar.size() != 0 && !sharedVariables.contains(id)){
-                    // Assignment in parallel block
-                    ArrayList<String> localVars = currentParallelLocalVar.get(currentParallelLocalVar.size() - 1);
-                    if (!localVars.contains(id))
-                        addError("Can not assign to '" + id + "' because it is a local variable " +
-                                "outside current parallel block.", ctx);
-                    else if (!onlyLocalAndSharedVariablesUsed(ctx.expr(i)))
-                        addError("Can not assign to '" + id + "' because it uses local variable(s) " +
-                                "outside the current parallel block", ctx);
-                    else symbolTable.initialize(id);
-                } else symbolTable.initialize(id);
 
-            }
+        } else { // Variable is only assigned
+            String id = ctx.ID().getText();
+            if (!symbolTable.contains(id)){
+                addError("Can not assign to '" + id + "' as it has not been declared before.", ctx);
+            } else if (!nodeType.get(ctx.expr()).equals(symbolTable.getType(id))){
+                addError("Can not assign to '" + id + "' because expected and actual type is different.",ctx);
+            } else if (currentParallelLocalVar.size() != 0 && !sharedVariables.contains(id)){
+                // Assignment in parallel block
+                ArrayList<String> localVars = currentParallelLocalVar.get(currentParallelLocalVar.size() - 1);
+                if (!localVars.contains(id))
+                    addError("Can not assign to '" + id + "' because it is a local variable " +
+                            "outside current parallel block.", ctx);
+                else if (!onlyLocalAndSharedVariablesUsed(ctx.expr()))
+                    addError("Can not assign to '" + id + "' because it uses local variable(s) " +
+                            "outside the current parallel block", ctx);
+                else symbolTable.initialize(id);
+            } else symbolTable.initialize(id);
+
         }
 
         if (isWheneverStatement) symbolTable.closeScope();
@@ -177,6 +163,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
             return true;
         }
     }
+
     /**
      * Tries to declare a variable in the symbol table.
      *
@@ -199,6 +186,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
                     return symbolTable.add(true, id, init, Type.CHARACTER);
             }
         } else if (ctx instanceof ArrayTypeContext arr){
+            addError("Can not declare array, ARRAY IS NOT SUPPORTED YET!", ctx);
             ArrayContext array = arr.array();
             ArrayList<Integer> lengths = new ArrayList<>();
             for (int i = 0; i < array.INTEGER().size(); i++){
@@ -218,7 +206,6 @@ public class TypeAndDeclarationChecker extends DBaseListener {
         }
         return false;
     }
-
 
     @Override
     public void enterIncrStat(IncrStatContext ctx){
@@ -254,42 +241,63 @@ public class TypeAndDeclarationChecker extends DBaseListener {
 
     @Override
     public void enterWhilstStat(WhilstStatContext ctx){
+        if (ctx.stat() instanceof DeclareStatContext)
+            addError("Invalid statement. Can not declare variable here.", ctx.stat());
+        if (ctx.stat() instanceof AssignStatContext assign && assign.dataType() != null)
+            addError("Invalid statement. Can not declare and assign variable here.", ctx.stat());
         symbolTable.openScope();
     }
 
     @Override
     public void exitWhilstStat(WhilstStatContext ctx){
         if (!nodeType.get(ctx.expr()).equals(Type.BOOLEAN))
-            addError("Invalid expression. Whilst condition expression is not of type boolean.", ctx);
-       symbolTable.closeScope();
+            addError("Invalid expression. Whilst condition expression is not of type boolean.", ctx.expr());
+        symbolTable.closeScope();
+    }
+
+    @Override
+    public void enterWheneverStat(WheneverStatContext ctx){
+        if (ctx.stat(0) instanceof DeclareStatContext)
+            addError("Invalid statement. Can not declare variable here.", ctx.stat(0));
+        if (ctx.stat(0) instanceof AssignStatContext assign && assign.dataType() != null)
+            addError("Invalid statement. Can not declare variable here.", ctx.stat(0));
+        if (ctx.stat(1) != null){
+            if (ctx.stat(1) instanceof DeclareStatContext)
+                addError("Invalid statement. Can not declare variable here.", ctx.stat(1));
+            if (ctx.stat(1) instanceof AssignStatContext assign && assign.dataType() != null)
+                addError("Invalid statement. Can not declare variable here.", ctx.stat(1));
+        }
     }
 
     @Override
     public void exitWheneverStat(WheneverStatContext ctx){
         if (!nodeType.get(ctx.expr()).equals(Type.BOOLEAN))
-            addError("Invalid expression. Whenever condition expression is not of type boolean.",ctx);
+            addError("Invalid expression. Whenever condition expression is not of type boolean.",ctx.expr());
     }
 
     @Override
     public void enterLoopStat(LoopStatContext ctx){
         StatContext beginStat = ctx.stat(0);
         StatContext endStat = ctx.stat(1);
-        if (beginStat instanceof DeclareStatContext || beginStat instanceof AssignStatContext ||
-            beginStat instanceof IncrStatContext || beginStat instanceof DecrStatContext ||
-                beginStat instanceof DoNothingStatContext);
-        else addError("Invalid statement type in loop begin statement.", ctx);
+        if (beginStat instanceof AssignStatContext || beginStat instanceof IncrStatContext
+                || beginStat instanceof DecrStatContext || beginStat instanceof DoNothingStatContext);
+        else addError("Invalid statement type in loop begin statement.", beginStat);
 
-        if (endStat instanceof DeclareStatContext || endStat instanceof AssignStatContext ||
-                endStat instanceof IncrStatContext || endStat instanceof DecrStatContext ||
-                endStat instanceof DoNothingStatContext);
-        else addError("Invalid statement type in loop end statement.", ctx);
+        if (endStat instanceof AssignStatContext || endStat instanceof IncrStatContext
+                || endStat instanceof DecrStatContext || endStat instanceof DoNothingStatContext);
+        else addError("Invalid statement type in loop end statement.", endStat);
+
+        if (ctx.stat(2) instanceof DeclareStatContext)
+            addError("Invalid statement. Can not declare variable here.", ctx.stat(2));
+        if (ctx.stat(2) instanceof AssignStatContext assign && assign.dataType() != null)
+            addError("Invalid statement. Can not declare and assign variable here.", ctx.stat(2));
         symbolTable.openScope();
     }
 
     @Override
     public void exitLoopStat(LoopStatContext ctx){
         if (!nodeType.get(ctx.expr()).equals(Type.BOOLEAN))
-            addError("Invalid expression. Loop condition expression is not of type boolean.",ctx);
+            addError("Invalid expression. Loop condition expression is not of type boolean.",ctx.expr());
         symbolTable.closeScope();
     }
 
@@ -305,7 +313,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
 
     @Override
     public void enterParallelStat(ParallelStatContext ctx){
-        RuleContext curr = ctx;
+        RuleContext curr = ctx.parent;
         while (!(curr instanceof ProgramContext)){
             if (curr instanceof CritSectionStatContext){
                 addError("Critical section can not contain parallel statement", ctx);
@@ -325,7 +333,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
 
     @Override
     public void enterCritSectionStat(CritSectionStatContext ctx){
-        RuleContext curr = ctx;
+        RuleContext curr = ctx.parent;
         while (!(curr instanceof ProgramContext)){
             if (curr instanceof CritSectionStatContext){
                 addError("Critical section can not be inside another critical section.", ctx);
@@ -347,32 +355,46 @@ public class TypeAndDeclarationChecker extends DBaseListener {
 
     @Override
     public void enterBreakStat(BreakStatContext ctx){
-        if (!partOfLoop(ctx)){
+        if (!partOfLoop(ctx))
             addError("Invalid usage of break statement. " +
-                    "Break statement must be part of any whilst or loop statement.", ctx);
-        }
+                    "Break statement must be inside a whilst or loop statement.", ctx);
     }
 
     @Override
     public void enterContinueStat(ContinueStatContext ctx){
-        if (!partOfLoop(ctx)){
+        if (!partOfLoop(ctx))
             addError("Invalid usage of continue statement." +
-                    "Continue statement must be part of any whilst or loop statement.", ctx);
-        }
+                    "Continue statement must be inside a whilst or loop statement.", ctx);
     }
 
-    public boolean partOfLoop(RuleContext ctx){
+    /**
+     * Check if a statement is inside a whilst or loop statement.
+     * Generally used to check if a continue or break statement is inside them.
+     * @param ctx the parse tree node of the statement
+     * @return <code>true</code> if the statement is inside a whilst or loop statement, <code>false</code> otherwise.
+     */
+    private boolean partOfLoop(RuleContext ctx){
         RuleContext currentCtx = ctx;
         while (!(currentCtx instanceof ProgramContext)){
-            if (currentCtx instanceof LoopStatContext || currentCtx instanceof WhilstStatContext){
-                return true;
-            } else{
-                currentCtx = currentCtx.parent;
-            }
+            if (currentCtx instanceof LoopStatContext || currentCtx instanceof WhilstStatContext) return true;
+            currentCtx = currentCtx.parent;
         }
         return false;
     }
 
+    @Override
+    public void enterPrintStat(PrintStatContext ctx){
+        String id = ctx.ID().getText();
+        if (currentParallelLocalVar.size() > 0){ // in parallel block
+            if (!symbolTable.contains(id) &&
+                    !currentParallelLocalVar.get(currentParallelLocalVar.size() - 1).contains(id))
+                addError("Can not print. Variable has not been declared.", ctx);
+        } else { // not in parallel block
+            if (!symbolTable.contains(ctx.ID().getText()) && !sharedVariables.contains(ctx.ID().getText())) {
+                addError("Can not print. Variable has not been declared.", ctx);
+            }
+        }
+    }
 
     @Override
     public void exitPrefixExpr(PrefixExprContext ctx){
@@ -401,6 +423,8 @@ public class TypeAndDeclarationChecker extends DBaseListener {
     public void exitMultDivExpr(MultDivExprContext ctx){
         if ((nodeType.get(ctx.expr(0)).equals(Type.INTEGER)) && (nodeType.get(ctx.expr(1)).equals(Type.INTEGER))){
             nodeType.put(ctx, Type.INTEGER);
+        } else if ((nodeType.get(ctx.expr(0)).equals(Type.ERROR)) || (nodeType.get(ctx.expr(1)).equals(Type.ERROR))){
+            nodeType.put(ctx, Type.ERROR);
         } else {
             addError("Multiplication and division only work for integers.", ctx);
             nodeType.put(ctx, Type.ERROR);
@@ -409,8 +433,10 @@ public class TypeAndDeclarationChecker extends DBaseListener {
 
     @Override
     public void exitAddMinExpr(AddMinExprContext ctx){
-        if ((nodeType.get(ctx.expr(0)).equals(Type.INTEGER)) && (nodeType.get(ctx.expr(1)).equals(Type.INTEGER))){
+        if ((nodeType.get(ctx.expr(0)).equals(Type.INTEGER)) && (nodeType.get(ctx.expr(1)).equals(Type.INTEGER))) {
             nodeType.put(ctx, Type.INTEGER);
+        } else if ((nodeType.get(ctx.expr(0)).equals(Type.ERROR)) || (nodeType.get(ctx.expr(1)).equals(Type.ERROR))){
+            nodeType.put(ctx, Type.ERROR);
         } else {
             addError("Addition and subtraction only work for integers.", ctx);
             nodeType.put(ctx, Type.ERROR);
@@ -435,6 +461,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
     public void exitBitwiseOpExpr(BitwiseOpExprContext ctx){
         Type expr0 = nodeType.get(ctx.expr(0));
         Type expr1 = nodeType.get(ctx.expr(1));
+
         if ((expr0 == Type.ERROR) || (expr1 == Type.ERROR)){
             nodeType.put(ctx, Type.ERROR);
         } else if (expr0.equals(expr1)){
@@ -454,6 +481,7 @@ public class TypeAndDeclarationChecker extends DBaseListener {
     public void exitShiftOpExpr(ShiftOpExprContext ctx){
         Type expr0 = nodeType.get(ctx.expr(0));
         Type expr1 = nodeType.get(ctx.expr(1));
+
         if ((expr0 == Type.ERROR) || (expr1 == Type.ERROR)){
             nodeType.put(ctx, Type.ERROR);
         } else if (!(expr1 == Type.INTEGER)) {
@@ -581,16 +609,9 @@ public class TypeAndDeclarationChecker extends DBaseListener {
     }
 
     public static void main(String[] args) {
-        String str =
-                """
-                shared int a;
-                char b;
-                a, b = 5, 'c';
-                
+        String str = """
+                print(c);
                 """;
-        String str1 = "int a,a;"; // err
-        String str2 = "shared int a,a;"; // err
-        String str3 = "int a,b = 5, a + 5;"; //err
-        System.out.println(TypeAndDeclarationChecker.INSTANCE.checkProgram(str3));
+        System.out.println(TypeAndDeclarationChecker.INSTANCE.checkProgram(str));
     }
 }

@@ -1,19 +1,23 @@
 package spril_converter;
 
-import org.antlr.v4.runtime.RuleContext;
 import type_checking.Type;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Result {
     /** Total threads needed*/
-    private int threadsNeeded = 1;
+    private int threadsNeeded;
     /** Critical section existence in the program*/
-    private boolean criticalSectionExist;
+    private int criticalSectionCount;
     /** List of shared variables*/
     private List<TwoTuple<String, Type>> sharedVariables;
+
+    public Result(){
+        threadsNeeded = 1;
+        criticalSectionCount = 0;
+        sharedVariables = new ArrayList<>();
+    }
 
     public int getThreadsNeeded() {
         return threadsNeeded;
@@ -23,9 +27,9 @@ public class Result {
         this.threadsNeeded = threadsNeeded;
     }
 
-    public boolean getCriticalSectionExist(){return criticalSectionExist;}
+    public int getCriticalSectionCount(){return criticalSectionCount;}
 
-    public void criticalSectionExist(){criticalSectionExist = true;}
+    public void incrementCritSectionCount(){criticalSectionCount++;}
 
     public List<TwoTuple<String,Type>> getSharedVariables(){
         return sharedVariables;
