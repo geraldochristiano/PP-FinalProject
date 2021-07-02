@@ -26,15 +26,15 @@ public class SemanticsTest {
 
     @Test
     public void operationTest() throws IOException {
-//        testTrue("int a = 6 + 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 8")));
-//        testTrue("int a = 6 - 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 4")));
-//        testTrue("int a = 6 * 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 12")));
-        testTrue("int a = 6 / 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 3")));
+        testTrue("int a = 6 - 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 4")));
+        testTrue("int a = 6 + 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 8")));
+        testTrue("int a = 6 * 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 12")));
+//        testTrue("int a = 6 / 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 3")));
 //        testTrue("int a = 6 ^ 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 36")));
-//        testTrue("int a = 6; a++; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 7")));
-//        testTrue("int a = 6; a--; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 5")));
-//        testTrue("int a = 15 >> 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 3")));
-//        testTrue("int a = 15 << 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 60")));
+        testTrue("int a = 6; a++; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 7")));
+        testTrue("int a = 6; a--; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 5")));
+        testTrue("int a = 15 >> 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 3")));
+        testTrue("int a = 15 << 2; print(a);", new ArrayList<>(Collections.singletonList("Sprockell 0 says 60")));
     }
 
     @Test
@@ -54,13 +54,13 @@ public class SemanticsTest {
                         break;
                     }
                     
-                    whilst (year > 1) {
-                        year = year / 4;
+                    whilst (year >= 4) {
+                        year = year - 4;
                     }
                     
                     
                     
-                    whenever (year == 1) {
+                    whenever (year == 0) {
                         result = 29;
                     } elseways {
                         result = 28;
@@ -89,15 +89,15 @@ public class SemanticsTest {
                         shared int result = 0;
                         
                         parallel {
-                            flag0 = go;
-                            flag1 = go;
                             critical {
+                                flag1 = go;
                                 turn = 0;
                                 whilst (flag0 and turn == 0);
                                 result = result + 5;
                                 flag1 = no-go;
                             }
                             critical {
+                                flag0 = go;
                                 turn = 1;
                                 whilst (flag1 and turn == 1);
                                 result = result + 7;
@@ -107,7 +107,7 @@ public class SemanticsTest {
                         
                         print(result);
                         """;
-        testTrue(expr, new ArrayList<>(Collections.singletonList("Sprockell 0 says 12")));
+        testTrue(expr, new ArrayList<>(Collections.singletonList("Sprockell 0 says 24")));
     }
 
     @Test
@@ -137,7 +137,7 @@ public class SemanticsTest {
                         
                         print(money);
                         """;
-        testTrue(expr, new ArrayList<>(Collections.singletonList("Sprockell 0 says 528")));
+        testTrue(expr, new ArrayList<>(Collections.singletonList("Sprockell 0 says 525")));
     }
 
     @Test(timeout = 3000)
@@ -147,7 +147,7 @@ public class SemanticsTest {
 
     @Test
     public void zeroDivision() throws IOException {
-        testTrue("int a = 1 / 0; print(a);", new ArrayList<>());
+        testFails("int a = 1 / 0; print(a);");
     }
 
     public void testTrue(String expr, ArrayList<String> expected) throws IOException {
@@ -155,8 +155,8 @@ public class SemanticsTest {
         assertEquals(expected, runCode(expr));
     }
 
-    public void testFalse(String expr) throws IOException {
-        assertFalse(checker.checkProgram(expr));
+    public void testFails(String expr) throws IOException {
+        assertTrue(checker.checkProgram(expr));
         runCode(expr);
     }
 
@@ -184,12 +184,14 @@ public class SemanticsTest {
         ArrayList<String> result = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            r.readLine();
+            System.out.println(r.readLine());
+//            r.readLine();
         }
 
         while (true) {
             line = r.readLine();
-            if (line == null || line.equals("")) break;
+            if (line == null) break;
+            if (line.equals("")) continue;
 
             result.add(line);
         }
