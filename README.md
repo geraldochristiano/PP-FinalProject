@@ -1,4 +1,4 @@
-# Compiler Construction for D Language
+# Final Project: Compiler Construction for D Language
 This repo contains the final project for Programming Paradigms course at University of Twente, which is the construction of a compiler for a custom language called *D*.  The compiler does **NOT** compile to native machine code, instead it compiles to SprIL (Sprockell Intermediate Language). The compiled SprIL code is run by the Sprockell virtual machine (VM) written in Haskell. This can be compared to the Java bytecode and JVM.
 
 This projects depends on [ANTLR v4](https://www.antlr.org/) for parsing. This dependency can be added with Maven, Eclipse plugin (which we use), or downloaded from the website.
